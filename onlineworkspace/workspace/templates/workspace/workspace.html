@@ -1,0 +1,67 @@
+{% extends 'workspace/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'workspace/workspace.css' %}">
+{% endblock %}
+
+{% block navbar %}<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>{% endblock %}
+
+{% block content %}
+
+	<h1>{{ workspace.name }}</h1>
+
+	<div class="row">
+		<div class="col-md-4">
+			<div class="calendar">
+				<h1>Calendar Goes Here</h1>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<h2>Tasks</h2>
+			<div>
+				<form method="POST">
+					{% csrf_token %}
+					<fieldset class="form-group quickadd">
+						<legend class="border-bottom">Quick add a task</legend>
+						{{ quicktaskform|crispy }}
+					</fieldset>
+					<button class="btn btn-outline-info" type="submit">Add</button>
+				</form>
+			</div>
+			<div>
+				<ul class="list-group">
+					{% for task in tasks %}
+						<div class="list-group-item list-group-item-action todoitem">
+							<p>{% if task.complete %}<del>{{task.name}}</del>{% else %}{{ task.name }}{% endif %}</p>
+							<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{task.id}}"></button>
+							<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ task.id }}" data-todoid="{{ task.id }}">
+								{% if task.complete %}
+									<a href="#" class="dropdown-item">Mark Incomplete</a>
+								{% else %}
+									<a href="#" class="dropdown-item">Mark Complete</a>
+								{% endif %}
+								<a href="#" class="dropdown-item">Edit</a>
+								<a href="#" class="dropdown-item">Set due date</a>
+								<div class="dropdown-divider"></div>
+								<a href="#" class="dropdown-item">Delete</a>
+							</div>
+						</div>
+					{% endfor %}
+				</ul>
+			</div>
+			{# Add New #}
+			<button class="btn btn-primary">Add Task</button>
+		</div>
+		<div class="col-md-4">
+			<h2>Folders</h2>
+			<div class="list-group">
+				{% for folder in folders %}
+					<a href="#" class="list-group-item list-group-item-action">{{ folder.name }}</a>
+				{% endfor %}
+			</div>
+			<button class="btn btn-primary">New Folder</button>
+		</div>
+	</div>
+
+{% endblock %}

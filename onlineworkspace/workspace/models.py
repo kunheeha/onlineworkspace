@@ -28,7 +28,7 @@ class Task(models.Model):
     urgent = models.BooleanField(default=False)
     complete = models.BooleanField(default=False)
     due_date = models.DateField(null=True, blank=True)
-    related_folders = models.ManyToManyField(Folder)
+    related_folders = models.ManyToManyField(Folder, blank=True)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
 
     def __str__(self):

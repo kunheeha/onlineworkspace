@@ -7,5 +7,6 @@ urlpatterns = [
     path('dashboard/', DashboardListView.as_view(), name='user-dashboard'),
     path('dashboard/new/', views.createWorkspace, name='new-workspace'),
     path('workspace/<int:pk>/edit/',
-         WorkspaceUpdateView.as_view(), name='workspace-edit')
+         WorkspaceUpdateView.as_view(), name='workspace-edit'),
+    path('workspace/<int:workspace_id>', views.workspace, name='user-workspace')
 ]

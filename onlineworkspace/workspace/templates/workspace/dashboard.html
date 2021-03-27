@@ -14,7 +14,7 @@
 		{% for workspace in workspaces %}
 			<div class="col mb-4">
 				<div class="card">
-			  	<a class="workspace-link" href="">
+			  	<a class="workspace-link" href="{% url 'user-workspace' workspace.id %}">
 			  		<div class="card-body">
 					    <h5 class="card-title">{{ workspace.name }}</h5>
 					    <p class="card-text">{{ workspace.desc }}</p>

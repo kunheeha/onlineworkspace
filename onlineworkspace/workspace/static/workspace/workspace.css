@@ -1,0 +1,18 @@
+.todoitem {
+	column-count: 2;
+}
+
+.todoitem p {
+	align-self: center;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.todoitem .btn {
+	padding-top: 3px;
+	padding-bottom: 3px
+}
+
+.quickadd {
+	margin-bottom: 0px;
+}

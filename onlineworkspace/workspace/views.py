@@ -5,7 +5,7 @@ from django.views.generic import ListView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Workspace, Folder, Task, File, Notebook, Note
-from .forms import CreateWorkspaceForm
+from .forms import CreateWorkspaceForm, TaskQuickAddForm
 
 
 def home(request):
@@ -50,3 +50,32 @@ class WorkspaceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user in workspace.users.all():
             return True
         return False
+
+
+@login_required
+def workspace(request, *args, **kwargs):
+    workspace_id = kwargs['workspace_id']
+    user_workspace = Workspace.objects.filter(id=workspace_id).first()
+    tasks = Task.objects.filter(workspace=user_workspace)
+    folders = Folder.objects.filter(workspace=user_workspace)
+
+    if request.method == 'POST':
+        quicktaskform = TaskQuickAddForm(
+            request.POST, initial={'workspace': user_workspace})
+        if quicktaskform.is_valid():
+            quicktaskform.save()
+            return redirect('user-workspace', workspace_id=workspace_id)
+
+    quicktaskform = TaskQuickAddForm(initial={'workspace': user_workspace})
+
+    context = {
+        'workspace': user_workspace,
+        'tasks': tasks,
+        'folders': folders,
+        'quicktaskform': quicktaskform
+    }
+
+    if request.user in user_workspace.users.all():
+        return render(request, 'workspace/workspace.html', context)
+
+    return render(request, 'workspace/deniedaccess.html')
