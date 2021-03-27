@@ -1,0 +1,37 @@
+{% extends 'workspace/base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block navbar %}<a class="nav-item nav-link" href="{% url 'new-workspace' %}">New Workspace</a>{% endblock %}
+
+{% block content %}
+
+	<h1>Dashboard</h1>
+
+	<div class="row row-cols-1 row-cols-md-3">
+		{% for workspace in workspaces %}
+			<div class="col mb-4">
+				<div class="card">
+			  	<a class="workspace-link" href="">
+			  		<div class="card-body">
+					    <h5 class="card-title">{{ workspace.name }}</h5>
+					    <p class="card-text">{{ workspace.desc }}</p>
+					  </div>
+			  	</a>
+				  <div class="card-footer text-right">
+				  	<div class="dropdown">
+				  		<a style="cursor:pointer" class="card-link" id="optionsLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</a>
+				  		<div class="dropdown-menu" aria-labelledby="optionsLink">
+				  			<a href="{% url 'workspace-edit' workspace.id %}" class="dropdown-item">Edit</a>
+				  			<a href="" class="dropdown-item">Invite to this workspace</a>
+				  		</div>
+				  	</div>
+				  </div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock %}

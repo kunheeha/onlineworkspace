@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'workspace.apps.WorkspaceConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -117,8 +118,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# LOGIN_REDIRECT_URL = 'home'
-# LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'user-dashboard'
+LOGIN_URL = 'login'
 
 MEDIA_ROOT = BASE_DIR / 'uploadfiles'
 MEDIA_URL = '/uploadfiles/'
