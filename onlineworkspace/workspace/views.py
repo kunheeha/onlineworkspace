@@ -6,7 +6,7 @@ from django.views.generic import ListView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Workspace, Folder, Task, File, Notebook, Note
-from .forms import CreateWorkspaceForm, TaskQuickAddForm, CreateFolderForm, CreateTaskForm, UpdateTaskForm
+from .forms import CreateWorkspaceForm, TaskQuickAddForm, CreateFolderForm, CreateTaskForm, UpdateTaskForm, UploadFileForm, CreateNotebookForm
 
 
 def home(request):
@@ -105,10 +105,33 @@ def folder(request, *args, **kwargs):
     folder_id = kwargs['folder_id']
     user_workspace = Workspace.objects.filter(id=workspace_id).first()
     user_folder = Folder.objects.filter(id=folder_id).first()
+    files = File.objects.filter(folder=user_folder)
+    notebooks = Notebook.objects.filter(folder=user_folder)
+
+    if request.method == 'POST':
+        uploadfileform = UploadFileForm(
+            request.POST, request.FILES, initial={'folder': user_folder})
+        notebookcreateform = CreateNotebookForm(
+            request.POST, initial={'folder': user_folder})
+        if 'uploadfile' in request.POST:
+            if uploadfileform.is_valid():
+                uploadfileform.save()
+                return redirect('user-folder', workspace_id=workspace_id, folder_id=folder_id)
+        elif 'createnotebook' in request.POST:
+            if notebookcreateform.is_valid():
+                notebookcreateform.save()
+                return redirect('user-folder', workspace_id=workspace_id, folder_id=folder_id)
+
+    uploadfileform = UploadFileForm(initial={'folder': user_folder})
+    notebookcreateform = CreateNotebookForm(initial={'folder': user_folder})
 
     context = {
         'workspace': user_workspace,
-        'folder': user_folder
+        'folder': user_folder,
+        'files': files,
+        'uploadfileform': uploadfileform,
+        'notebooks': notebooks,
+        'notebookcreateform': notebookcreateform
     }
 
     if request.user in user_workspace.users.all():
@@ -144,3 +167,40 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         task = self.get_object()
         return reverse('user-workspace', kwargs={'workspace_id': task.workspace.id})
+
+
+class FileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = File
+
+    def test_func(self):
+        file = self.get_object()
+        if self.request.user in file.folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        folder = self.object.folder
+        return reverse('user-folder', kwargs={'workspace_id': folder.workspace.id, 'folder_id': folder.id})
+
+
+@login_required
+def notebook(request, *args, **kwargs):
+    workspace_id = kwargs['workspace_id']
+    folder_id = kwargs['folder_id']
+    notebook_id = kwargs['notebook_id']
+    user_workspace = Workspace.objects.filter(id=workspace_id).first()
+    user_folder = Folder.objects.filter(id=folder_id).first()
+    user_notebook = Notebook.objects.filter(id=notebook_id).first()
+    notes = Note.objects.filter(notebook=user_notebook)
+
+    context = {
+        'workspace': user_workspace,
+        'folder': user_folder,
+        'notebook': user_notebook,
+        'notes': notes
+    }
+
+    if request.user in user_workspace.users.all():
+        return render(request, 'workspace/notebook.html', context)
+
+    return render(request, 'workspace/deniedaccess.html')

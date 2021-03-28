@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Workspace, Task, Folder
+from .models import Workspace, Task, Folder, File, Notebook
 
 
 class CreateWorkspaceForm(ModelForm):
@@ -47,4 +47,22 @@ class UpdateTaskForm(ModelForm):
         fields = ['name', 'urgent', 'due_date', 'related_folders']
         widgets = {
             'due_date': DateInput()
+        }
+
+
+class UploadFileForm(ModelForm):
+    class Meta:
+        model = File
+        fields = ['name', 'desc', 'filePath', 'folder']
+        widgets = {
+            'folder': forms.HiddenInput()
+        }
+
+
+class CreateNotebookForm(ModelForm):
+    class Meta:
+        model = Notebook
+        fields = ['title', 'folder']
+        widgets = {
+            'folder': forms.HiddenInput()
         }

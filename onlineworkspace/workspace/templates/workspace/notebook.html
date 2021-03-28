@@ -1,0 +1,23 @@
+{% extends 'workspace/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+{% endblock %}
+
+{% block navbar %}
+	<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
+	<a class="nav-item nav-link" href="{% url 'user-workspace' workspace.id %}">{{ workspace.name }}</a>
+	<a class="nav-item nav-link" href="{% url 'user-folder' workspace.id folder.id %}">{{ folder.name }}</a>
+{% endblock %}
+
+{% block content %}
+
+	<h1>{{ notebook.title }}</h1>
+	<div class="row">
+		<div class="col-md-4">
+			<h4>Notes</h4>
+		</div>
+		<div class="col-md-8"></div>
+	</div>
+
+{% endblock %}

@@ -12,5 +12,94 @@
 {% block content %}
 
 	<h1>{{ folder.name }}</h1>
+	<div class="row">
+		{# Notebooks #}
+		<div class="col-md-4">
+			<h2>Notebooks</h2>
+			<div class="list-group">
+				{% for notebook in notebooks %}
+					<a href="{% url 'user-notebook' workspace.id folder.id notebook.id %}" class="list-group-item list-group-item-action">{{ notebook.title }}</a>
+				{% endfor %}
+			</div>
+			<button class="btn btn-primary" data-toggle="modal" data-target="#createNotebook">New Notebook</button>
+		</div>
+		{# Files #}
+		<div class="col-md-8">
+			{% if files %}
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<th>File Name</th>
+								<th>Description</th>
+								<th>Download</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for file in files %}
+							<tr>
+								<td>{{ file.name }}</td>
+								<td>{{ file.desc }}</td>
+								<td><a href="/uploadfiles/{{ file.filePath }}" class="btn btn-outline-info btn-sm" target="_blank">Download</a></td>
+								<td><a href="{% url 'file-delete' file.id %}" class="btn btn-outline-danger btn-sm">Delete</a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% else %}
+				<p>No files in this folder</p>
+			{% endif %}
+			{# Upload Files #}
+			<button class="btn btn-outline-info" data-toggle="modal" data-target="#uploadFile">Upload File</button>
+		</div>
+	</div>
+	{# Upload File Modal #}
+	<div class="modal fade" id="uploadFile" tabindex="-1" role="dialog" aria-labelledby="newFileModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="newFileModalLabel">New File</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form method="POST" enctype="multipart/form-data">
+	      	{% csrf_token %}
+		      <div class="modal-body">
+		      	{{ uploadfileform|crispy }}
+		      </div>
+		      <div class="modal-footer">
+		      	<button type="submit" name="uploadfile" class="btn btn-primary">Upload</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+	{# New Notebook Modal #}
+	<div class="modal fade" id="createNotebook" tabindex="-1" role="dialog" aria-labelledby="newNotebookModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="newNotebookModalLabel">New Notebook</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form method="POST">
+	      	{% csrf_token %}
+		      <div class="modal-body">
+		      	{{ notebookcreateform|crispy }}
+		      </div>
+		      <div class="modal-footer">
+		        <button type="submit" name="createnotebook" class="btn btn-primary">Create</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
 
 {% endblock %}

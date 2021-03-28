@@ -49,7 +49,7 @@ class File(models.Model):
         return f'File {self.name}, belongs to {self.folder.name} from {self.folder.workspace.name}'
 
     def delete(self, *args, **kwargs):
-        self.filename.delete()
+        self.filePath.delete()
         super().delete(*args, **kwargs)
 
 
