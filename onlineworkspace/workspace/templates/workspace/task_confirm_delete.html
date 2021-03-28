@@ -1,0 +1,24 @@
+{% extends 'workspace/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+
+	<div class='content-section'>
+		<form method='POST'>
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class="border-bottome mb-4">Delete Task</legend>
+				<h2>Are you sure you want to delete task {{ object.name }}?</h2>
+			</fieldset>
+			<div class="form-group">
+				<button class="btn btn-outline-danger" type="submit">Delete</button>
+				<a href="{% url 'user-workspace' object.workspace.id %}" class="btn btn-outline-info">Cancel</a>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}

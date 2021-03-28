@@ -26,13 +26,13 @@
 						<legend class="border-bottom">Quick add a task</legend>
 						{{ quicktaskform|crispy }}
 					</fieldset>
-					<button class="btn btn-outline-info" type="submit">Add</button>
+					<button class="btn btn-outline-info" name="addtask" type="submit">Add</button>
 				</form>
 			</div>
 			<div>
 				<ul class="list-group">
 					{% for task in tasks %}
-						<div class="list-group-item list-group-item-action todoitem">
+						<div class="list-group-item list-group-item-action {% if task.urgent %}list-group-item-warning{% endif %}" data-toggle="modal" data-target="#task{{ task.id }}Detail">
 							<p>{% if task.complete %}<del>{{task.name}}</del>{% else %}{{ task.name }}{% endif %}</p>
 							<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{task.id}}"></button>
 							<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ task.id }}" data-todoid="{{ task.id }}">
@@ -41,27 +41,105 @@
 								{% else %}
 									<a href="#" class="dropdown-item">Mark Complete</a>
 								{% endif %}
-								<a href="#" class="dropdown-item">Edit</a>
-								<a href="#" class="dropdown-item">Set due date</a>
+								<a href="{% url 'task-edit' task.id %}" class="dropdown-item">Edit</a>
 								<div class="dropdown-divider"></div>
-								<a href="#" class="dropdown-item">Delete</a>
+								<a href="{% url 'task-delete' task.id %}" class="dropdown-item">Delete</a>
 							</div>
+						</div>
+						{# Task Detail Modal #}
+						<div class="modal fade" id="task{{ task.id }}Detail" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="taskDetailModalLabel">{{ task.name }}</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+						      	<h4>Task : {{ task.name }}</h4>
+						      	{% if task.urgent %}
+						      		<h4>URGENT</h4>
+						      	{% endif %}
+						      	{% if task.due_date %}
+						      		<p>Due {{ task.due_date }}</p>
+						      	{% endif %}
+						      	{% if task.related_folders %}
+						      		{% for folder in task.related_folders.all %}
+						      			<a href="{% url 'user-folder' folder.id %}">{{ folder.name }}</a>
+						      		{% endfor %}
+						      	{% endif %}
+						      </div>
+						      <div class="modal-footer">
+						        <a class="btn btn-outline-info" href="{% url 'task-edit' task.id %}">Edit</a>
+						        <a class="btn btn-outline-danger" href="{% url 'task-delete' task.id %}">Delete</a>
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						      </div>
+						    </div>
+						  </div>
 						</div>
 					{% endfor %}
 				</ul>
 			</div>
 			{# Add New #}
-			<button class="btn btn-primary">Add Task</button>
+			<button class="btn btn-primary" data-toggle="modal" data-target="#createTask">New Task</button>
 		</div>
 		<div class="col-md-4">
 			<h2>Folders</h2>
 			<div class="list-group">
 				{% for folder in folders %}
-					<a href="#" class="list-group-item list-group-item-action">{{ folder.name }}</a>
+					<a href="{% url 'user-folder' workspace.id folder.id %}" class="list-group-item list-group-item-action">{{ folder.name }}</a>
 				{% endfor %}
 			</div>
-			<button class="btn btn-primary">New Folder</button>
+			<button class="btn btn-primary" data-toggle="modal" data-target="#createFolder">New Folder</button>
 		</div>
 	</div>
+	{# New Folder Modal #}
+	<div class="modal fade" id="createFolder" tabindex="-1" role="dialog" aria-labelledby="newFolderModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="newFolderModalLabel">New Folder</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form method="POST">
+	      	{% csrf_token %}
+		      <div class="modal-body">
+		      	{{ createfolderform|crispy }}
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <button type="submit" name="createfolder" class="btn btn-primary">Create</button>
+		      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+	{# New Task Modal #}
+	<div class="modal fade" id="createTask" tabindex="-1" role="dialog" aria-labelledby="newTaskModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="newTaskModalLabel">New Task</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form method="POST">
+	      	{% csrf_token %}
+		      <div class="modal-body">
+		      	{{ createtaskform|crispy }}
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <button type="submit" name="createtask" class="btn btn-primary">Create</button>
+		      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+
 
 {% endblock %}

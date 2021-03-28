@@ -1,0 +1,16 @@
+{% extends 'workspace/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+{% endblock %}
+
+{% block navbar %}
+	<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
+	<a class="nav-item nav-link" href="{% url 'user-workspace' workspace.id %}">{{ workspace.name }}</a>
+{% endblock %}
+
+{% block content %}
+
+	<h1>{{ folder.name }}</h1>
+
+{% endblock %}
