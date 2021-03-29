@@ -13,7 +13,7 @@ load_dotenv()
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = '#&1hh(0mm41equt6f^sipvh1^7i7-g+1!t1lm8@@8%hht*!n3l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -116,7 +116,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 
-#heroku stuff
+# heroku stuff
 MEDIA_ROOT = BASE_DIR / 'staticfiles'
 
 
