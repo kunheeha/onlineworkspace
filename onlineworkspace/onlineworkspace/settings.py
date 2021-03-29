@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -128,3 +129,5 @@ LOGIN_URL = 'login'
 
 MEDIA_ROOT = BASE_DIR / 'uploadfiles'
 MEDIA_URL = '/uploadfiles/'
+
+django_heroku.settings(locals())
