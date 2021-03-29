@@ -117,7 +117,7 @@ USE_TZ = True
 
 
 # heroku stuff
-MEDIA_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 STATIC_URL = '/static/'
