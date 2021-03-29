@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block navbar %}
-	<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
+	{% if user.is_authenticated %}
+		<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
+	{% endif %}
 {% endblock %}
 
 {% block content %}
