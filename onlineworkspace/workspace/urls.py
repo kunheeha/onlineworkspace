@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DashboardListView, WorkspaceUpdateView, TaskUpdateView, TaskDeleteView, FileDeleteView
+from .views import DashboardListView, WorkspaceUpdateView, TaskUpdateView, TaskDeleteView, FileDeleteView, FolderUpdateView, NotebookUpdateView, NotebookDeleteView
 from . import views
 
 urlpatterns = [
@@ -14,5 +14,10 @@ urlpatterns = [
     path('task/<int:pk>/edit', TaskUpdateView.as_view(), name='task-edit'),
     path('task/<int:pk>/delete', TaskDeleteView.as_view(), name='task-delete'),
     path('file/<int:pk>/delete', FileDeleteView.as_view(), name='file-delete'),
-    path('notebook/<int:workspace_id>/<int:folder_id>/<int:notebook_id>/', views.notebook, name='user-notebook')
+    path('notebook/<int:workspace_id>/<int:folder_id>/<int:notebook_id>/',
+         views.notebook, name='user-notebook'),
+    path('folder/<int:pk>/edit', FolderUpdateView.as_view(), name='folder-edit'),
+    path('notebook/<int:pk>/edit',
+         NotebookUpdateView.as_view(), name='notebook-edit'),
+    path('notebook/<int:pk>/delete', NotebookDeleteView.as_view(), name='notebook-delete')
 ]

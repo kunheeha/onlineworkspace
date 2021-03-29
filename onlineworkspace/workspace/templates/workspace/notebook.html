@@ -10,6 +10,9 @@
 	<a class="nav-item nav-link" href="{% url 'user-folder' workspace.id folder.id %}">{{ folder.name }}</a>
 {% endblock %}
 
+{% block rightnav %}<a class="nav-item nav-link" href="{% url 'notebook-edit' notebook.id %}">Edit Notebook</a>{% endblock %}
+
+
 {% block content %}
 
 	<h1>{{ notebook.title }}</h1>

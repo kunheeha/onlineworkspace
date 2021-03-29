@@ -204,3 +204,47 @@ def notebook(request, *args, **kwargs):
         return render(request, 'workspace/notebook.html', context)
 
     return render(request, 'workspace/deniedaccess.html')
+
+
+class FolderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Folder
+    fields = ['name']
+
+    def test_func(self):
+        folder = self.get_object()
+        if self.request.user in folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        folder = self.get_object()
+        return reverse('user-folder', kwargs={'workspace_id': folder.workspace.id, 'folder_id': folder.id})
+
+
+class NotebookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Notebook
+    fields = ['title']
+
+    def test_func(self):
+        notebook = self.get_object()
+        if self.request.user in notebook.folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        notebook = self.get_object()
+        return reverse('user-notebook', kwargs={'workspace_id': notebook.folder.workspace.id, 'folder_id': notebook.folder.id, 'notebook_id': notebook.id})
+
+
+class NotebookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Notebook
+
+    def test_func(self):
+        file = self.get_object()
+        if self.request.user in file.folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        folder = self.object.folder
+        return reverse('user-folder', kwargs={'workspace_id': folder.workspace.id, 'folder_id': folder.id})
