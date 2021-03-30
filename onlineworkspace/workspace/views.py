@@ -222,9 +222,23 @@ def notebook(request, *args, **kwargs):
     return render(request, 'workspace/deniedaccess.html')
 
 
-class NoteUpdateModal(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class NoteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Note
     form_class = EditNoteForm
+
+    def test_func(self):
+        note = self.get_object()
+        if self.request.user in note.notebook.folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        notebook = self.object.notebook
+        return reverse('user-notebook', kwargs={'workspace_id': notebook.folder.workspace.id, 'folder_id': notebook.folder.id, 'notebook_id': notebook.id})
+
+
+class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Note
 
     def test_func(self):
         note = self.get_object()

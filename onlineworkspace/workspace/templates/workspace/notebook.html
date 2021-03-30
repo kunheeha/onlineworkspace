@@ -2,6 +2,9 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block head %}
+
+	<link rel="stylesheet" type="text/css" href="{% static 'workspace/notebook.css' %}">
+
 {% endblock %}
 
 {% block navbar %}
@@ -22,13 +25,13 @@
 			<div>
 				<ul class="list-group">
 					{% for note in notes %}
-						<div class="list-group-item list-group-item-action">
+						<div class="list-group-item list-group-item-action allNotes" data-noteid="{{ note.id }}">
 							<p>{{ note.title }}</p>
 							<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="noteDropdown-{{note.id}}"></button>
 							<div class="dropdown-menu" aria-labelledby="noteDropdown-{{ note.id }}" data-noteid="{{ note.id }}">
 								<a href="{% url 'note-edit' note.id %}" class="dropdown-item">Edit</a>
 								<div class="dropdown-divider"></div>
-								<a href="#############" class="dropdown-item">Delete</a>
+								<a href="{% url 'note-delete' note.id %}" class="dropdown-item">Delete</a>
 							</div>
 						</div>
 					{% endfor %}
@@ -60,7 +63,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-8"></div>
+		<div class="col-md-8">
+			{% for note in notes %}
+				<div class="notes inactiveNote" id="{{ note.id }}">
+					<h3>{{ note.title }}</h3>
+					<div>{{ note.content|safe }}</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 
 
