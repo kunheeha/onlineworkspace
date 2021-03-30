@@ -6,11 +6,11 @@
 
 {% block navbar %}
 	<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
-	<a class="nav-item nav-link" href="{% url 'user-workspace' workspace.id %}">{{ workspace.name }}</a>
-	<a class="nav-item nav-link" href="{% url 'user-folder' workspace.id folder.id %}">{{ folder.name }}</a>
+	<a class="nav-item nav-link" id="currentWorkspace" data-thisid="{{ workspace.id }}" href="{% url 'user-workspace' workspace.id %}">{{ workspace.name }}</a>
+	<a class="nav-item nav-link" id="currentFolder" data-thisid="{{ folder.id }}" href="{% url 'user-folder' workspace.id folder.id %}">{{ folder.name }}</a>
 {% endblock %}
 
-{% block rightnav %}<a class="nav-item nav-link" href="{% url 'notebook-edit' notebook.id %}">Edit Notebook</a>{% endblock %}
+{% block rightnav %}<a class="nav-item nav-link" id="currentNotebook" data-thisid="{{ notebook.id }}" href="{% url 'notebook-edit' notebook.id %}">Edit Notebook</a>{% endblock %}
 
 
 {% block content %}
@@ -19,8 +19,56 @@
 	<div class="row">
 		<div class="col-md-4">
 			<h4>Notes</h4>
+			<div>
+				<ul class="list-group">
+					{% for note in notes %}
+						<div class="list-group-item list-group-item-action">
+							<p>{{ note.title }}</p>
+							<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="noteDropdown-{{note.id}}"></button>
+							<div class="dropdown-menu" aria-labelledby="noteDropdown-{{ note.id }}" data-noteid="{{ note.id }}">
+								<a href="{% url 'note-edit' note.id %}" class="dropdown-item">Edit</a>
+								<div class="dropdown-divider"></div>
+								<a href="#############" class="dropdown-item">Delete</a>
+							</div>
+						</div>
+					{% endfor %}
+				</ul>
+				<button class="btn btn-primary" data-toggle="modal" data-target="#noteCreate">New Note</button>
+				{# Note Create Modal #}
+				<div class="modal fade" id="noteCreate" tabindex="-1" role="dialog" aria-labelledby="noteCreateModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="noteCreateModalLabel">New Note</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label"Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							{{ createnoteform.media }}
+							<form method="POST" enctype="multipart/form-data">
+								{% csrf_token %}
+								<div class="modal-body">
+									{{ createnoteform|crispy }}
+								</div>
+								<div class="modal-footer">
+									<button type="submit" name="createnote" class="btn btn-primary">Save</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-8"></div>
 	</div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+	<script type="text/javascript" src="{% static 'workspace/notebook.js' %}"></script>
 
 {% endblock %}

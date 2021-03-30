@@ -1,6 +1,7 @@
 from django import forms
+from tinymce import TinyMCE
 from django.forms import ModelForm
-from .models import Workspace, Task, Folder, File, Notebook
+from .models import Workspace, Task, Folder, File, Notebook, Note
 
 
 class CreateWorkspaceForm(ModelForm):
@@ -65,4 +66,35 @@ class CreateNotebookForm(ModelForm):
         fields = ['title', 'folder']
         widgets = {
             'folder': forms.HiddenInput()
+        }
+
+
+class TinyMCEWidget(TinyMCE):
+    def use_required_attribute(self, *args):
+        return False
+
+
+class CreateNoteForm(ModelForm):
+    content = forms.CharField(
+        widget=TinyMCEWidget(attrs={'required': False, 'cols': 30, 'rows': 10})
+    )
+
+    class Meta:
+        model = Note
+        fields = ['title', 'content', 'notebook']
+        widgets = {
+            'notebook': forms.HiddenInput()
+        }
+
+
+class EditNoteForm(ModelForm):
+    content = forms.CharField(
+        widget=TinyMCEWidget(attrs={'required': False, 'cols': 30, 'rows': 10})
+    )
+
+    class Meta:
+        model = Note
+        fields = ['title', 'content', 'notebook']
+        widgets = {
+            'notebook': forms.HiddenInput()
         }

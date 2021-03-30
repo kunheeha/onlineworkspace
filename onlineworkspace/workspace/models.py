@@ -1,4 +1,5 @@
 from django.db import models
+from tinymce import HTMLField
 from django.contrib.auth.models import User
 from django.urls import reverse
 
@@ -63,7 +64,7 @@ class Notebook(models.Model):
 
 class Note(models.Model):
     title = models.CharField(max_length=50)
-    content = models.TextField()
+    content = HTMLField()
     last_edited = models.DateTimeField(auto_now=True)
     notebook = models.ForeignKey(Notebook, on_delete=models.CASCADE)
 

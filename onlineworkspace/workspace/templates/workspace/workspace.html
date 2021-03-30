@@ -66,7 +66,7 @@
 						      	{% endif %}
 						      	{% if task.related_folders %}
 						      		{% for folder in task.related_folders.all %}
-						      			<a href="{% url 'user-folder' folder.id %}">{{ folder.name }}</a>
+						      			<a href="{% url 'user-folder' workspace.id folder.id %}">{{ folder.name }}</a>
 						      		{% endfor %}
 						      	{% endif %}
 						      </div>

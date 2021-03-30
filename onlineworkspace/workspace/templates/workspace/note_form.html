@@ -8,15 +8,16 @@
 {% block content %}
 
 	<div class='content-section'>
+		{{ form.media }}
 		<form method='POST'>
 			{% csrf_token %}
 			<fieldset class="form-group">
-				<legend class="border-bottome mb-4">Edit Folder</legend>
+				<legend class="border-bottome mb-4">Edit Note</legend>
 				{{ form|crispy }}
 			</fieldset>
 			<div class="form-group">
 				<button class="btn btn-outline-info" type="submit">Save</button>
-				<a href="{% url 'folder-delete' object.id %}" class="btn btn-danger">Delete</a>
+				<a href="#" class="btn btn-danger">Delete</a>
 			</div>
 		</form>
 	</div>

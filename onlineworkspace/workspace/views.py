@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -6,7 +7,11 @@ from django.views.generic import ListView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Workspace, Folder, Task, File, Notebook, Note
-from .forms import CreateWorkspaceForm, TaskQuickAddForm, CreateFolderForm, CreateTaskForm, UpdateTaskForm, UploadFileForm, CreateNotebookForm
+from .forms import (
+    CreateWorkspaceForm, TaskQuickAddForm, CreateFolderForm,
+    CreateTaskForm, UpdateTaskForm, UploadFileForm,
+    CreateNotebookForm, CreateNoteForm, EditNoteForm
+)
 
 
 def home(request):
@@ -193,17 +198,43 @@ def notebook(request, *args, **kwargs):
     user_notebook = Notebook.objects.filter(id=notebook_id).first()
     notes = Note.objects.filter(notebook=user_notebook)
 
+    if request.method == 'POST':
+        createnoteform = CreateNoteForm(
+            request.POST, initial={'notebook': user_notebook})
+        if 'createnote' in request.POST:
+            if createnoteform.is_valid():
+                createnoteform.save()
+                return redirect('user-notebook', workspace_id=workspace_id, folder_id=folder_id, notebook_id=notebook_id)
+
+    createnoteform = CreateNoteForm(initial={'notebook': user_notebook})
+
     context = {
         'workspace': user_workspace,
         'folder': user_folder,
         'notebook': user_notebook,
-        'notes': notes
+        'notes': notes,
+        'createnoteform': createnoteform,
     }
 
     if request.user in user_workspace.users.all():
         return render(request, 'workspace/notebook.html', context)
 
     return render(request, 'workspace/deniedaccess.html')
+
+
+class NoteUpdateModal(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Note
+    form_class = EditNoteForm
+
+    def test_func(self):
+        note = self.get_object()
+        if self.request.user in note.notebook.folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        notebook = self.object.notebook
+        return reverse('user-notebook', kwargs={'workspace_id': notebook.folder.workspace.id, 'folder_id': notebook.folder.id, 'notebook_id': notebook.id})
 
 
 class FolderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -240,11 +271,25 @@ class NotebookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Notebook
 
     def test_func(self):
-        file = self.get_object()
-        if self.request.user in file.folder.workspace.users.all():
+        notebook = self.get_object()
+        if self.request.user in notebook.folder.workspace.users.all():
             return True
         return False
 
     def get_success_url(self):
         folder = self.object.folder
         return reverse('user-folder', kwargs={'workspace_id': folder.workspace.id, 'folder_id': folder.id})
+
+
+class FolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Folder
+
+    def test_func(self):
+        folder = self.get_object()
+        if self.request.user in folder.workspace.users.all():
+            return True
+        return False
+
+    def get_success_url(self):
+        folder = self.get_object()
+        return reverse('user-workspace', kwargs={'workspace_id': folder.workspace.id})

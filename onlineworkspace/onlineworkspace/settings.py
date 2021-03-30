@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import os
-import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -14,12 +13,12 @@ load_dotenv()
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#&1hh(0mm41equt6f^sipvh1^7i7-g+1!t1lm8@@8%hht*!n3l'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.16', 'localhost', 'adamgaylord.herokuapp.com']
+ALLOWED_HOSTS = ['192.168.0.16', 'localhost']
 
 
 # Application definition
@@ -33,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+    'tinymce',
 
     'workspace.apps.WorkspaceConfig',
     'users.apps.UsersConfig',
@@ -117,10 +117,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 
-# heroku stuff
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -130,4 +126,32 @@ LOGIN_URL = 'login'
 MEDIA_ROOT = BASE_DIR / 'uploadfiles'
 MEDIA_URL = '/uploadfiles/'
 
-django_heroku.settings(locals())
+
+# TinyMCE
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'theme': 'modern',
+    'plugins': '''
+            textcolor save link image media preview codesample contextmenu
+            table code lists fullscreen  insertdatetime  nonbreaking
+            contextmenu directionality searchreplace wordcount visualblocks
+            visualchars code fullscreen autolink lists  charmap print  hr
+            anchor pagebreak
+            ''',
+    'toolbar1': '''
+            fullscreen preview bold italic underline | fontselect,
+            fontsizeselect  | forecolor backcolor | alignleft alignright |
+            aligncenter alignjustify | indent outdent | bullist numlist table |
+            | link image media | codesample |
+            ''',
+    'toolbar2': '''
+            visualblocks visualchars |
+            charmap hr pagebreak nonbreaking anchor |  code |
+            ''',
+    'contextmenu': 'formats | link image',
+    'menubar': True,
+    'statusbar': True,
+}
