@@ -2,6 +2,9 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block head %}
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+
 {% endblock %}
 
 {% block navbar %}
@@ -105,5 +108,9 @@
 	    </div>
 	  </div>
 	</div>
+
+	<script type="text/javascript">
+		document.getElementById('notebooksearch').value = '{{notebookquery}}';
+	</script>
 
 {% endblock %}

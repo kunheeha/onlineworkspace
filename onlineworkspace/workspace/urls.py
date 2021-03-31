@@ -29,5 +29,7 @@ urlpatterns = [
     path('folder/<int:pk>/delete/',
          FolderDeleteView.as_view(), name='folder-delete'),
     path('note/<int:pk>/update/', NoteUpdateView.as_view(), name='note-edit'),
-    path('note/<int:pk>/delete/', NoteDeleteView.as_view(), name='note-delete')
+    path('note/<int:pk>/delete/', NoteDeleteView.as_view(), name='note-delete'),
+    path('invite<int:workspace_id>/',
+         views.workspaceinvite, name='workspace-invite')
 ]

@@ -1,5 +1,6 @@
 import json
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -64,6 +65,10 @@ def workspace(request, *args, **kwargs):
     user_workspace = Workspace.objects.filter(id=workspace_id).first()
     tasks = Task.objects.filter(workspace=user_workspace)
     folders = Folder.objects.filter(workspace=user_workspace)
+    query = ''
+    if request.GET and 'q' in request.GET:
+        query = request.GET['q']
+        context['query'] = str(query)
 
     if request.method == 'POST':
         quicktaskform = TaskQuickAddForm(
@@ -307,3 +312,39 @@ class FolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         folder = self.get_object()
         return reverse('user-workspace', kwargs={'workspace_id': folder.workspace.id})
+
+
+def get_users_queryset(query=None):
+    queryset = []
+    queries = query.split(' ')
+    for q in queries:
+        users = User.objects.filter(Q(username__icontains=q)).distinct()
+
+        for user in users:
+            queryset.append(user)
+
+    return list(set(queryset))
+
+
+@login_required
+def workspaceinvite(request, *args, **kwargs):
+    workspace_id = kwargs['workspace_id']
+    user_workspace = Workspace.objects.filter(id=workspace_id).first()
+
+    context = {
+        'workspace': user_workspace
+    }
+
+    user_query = ''
+
+    if request.GET:
+        user_query = request.GET['usersearch']
+        context['user_query'] = str(user_query)
+
+    users = get_users_queryset(user_query)
+    context['users'] = users
+
+    if request.user in user_workspace.users.all():
+        return render(request, 'workspace/invite.html', context)
+
+    return render(request, 'workspace/deniedaccess.html')
