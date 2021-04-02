@@ -16,3 +16,12 @@
 .quickadd {
 	margin-bottom: 0px;
 }
+
+.align-items-center p {
+	margin-bottom: 0px !important;
+	vertical-align: middle !important;
+}
+
+.allTasks {
+	padding: 10px 20px !important;
+}

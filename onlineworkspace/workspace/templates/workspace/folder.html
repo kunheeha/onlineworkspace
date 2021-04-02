@@ -19,19 +19,12 @@
 {% block content %}
 
 	<h1>{{ folder.name }}</h1>
+	<hr>
 	<div class="row">
-		{# Notebooks #}
-		<div class="col-md-4">
-			<h2>Notebooks</h2>
-			<div class="list-group">
-				{% for notebook in notebooks %}
-					<a href="{% url 'user-notebook' workspace.id folder.id notebook.id %}" class="list-group-item list-group-item-action">{{ notebook.title }}</a>
-				{% endfor %}
-			</div>
-			<button class="btn btn-primary" data-toggle="modal" data-target="#createNotebook">New Notebook</button>
-		</div>
-		{# Files #}
+		{# Files Table #}
 		<div class="col-md-8">
+			<h3 class="text-center">Files</h3>
+			<hr>
 			{% if files %}
 				<div>
 					<table>
@@ -58,8 +51,22 @@
 			{% else %}
 				<p>No files in this folder</p>
 			{% endif %}
-			{# Upload Files #}
-			<button class="btn btn-outline-info" data-toggle="modal" data-target="#uploadFile">Upload File</button>
+			<hr>
+			<div><button class="btn btn-outline-info" data-toggle="modal" data-target="#uploadFile">Upload File</button></div>
+		</div>
+		{# Notebooks #}
+		<div class="col-md-4">
+			<h3 class="text-center">Notebooks</h3>
+			<hr>
+			<div class="list-group">
+				{% for notebook in notebooks %}
+					<a href="{% url 'user-notebook' workspace.id folder.id notebook.id %}" class="list-group-item list-group-item-action">{{ notebook.title }}</a>
+				{% endfor %}
+			</div>
+			<hr>
+			<div class="float-right">
+				<button class="btn btn-outline-dark" data-toggle="modal" data-target="#createNotebook">New Notebook</button>
+			</div>
 		</div>
 	</div>
 	{# Upload File Modal #}

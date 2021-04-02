@@ -10,6 +10,7 @@
 {% block content %}
 
 	<h1>{{ workspace.name }}</h1>
+	<hr>
 
 	<div class="row">
 		<div class="col-md-4">
@@ -20,27 +21,32 @@
 						<legend class="border-bottom">Quick add a task</legend>
 						{{ quicktaskform|crispy }}
 					</fieldset>
-					<button class="btn btn-outline-info" name="addtask" type="submit">Add</button>
+					<button class="btn btn-outline-dark" name="addtask" type="submit">Add</button>
 				</form>
 			</div>
+			<hr>
+			<button class="btn btn-outline-info" data-toggle="modal" data-target="#createTask">New Detailed Task</button>
 		</div>
 		<div class="col-md-4">
-			<h2>Tasks</h2>
+			<h2 class="text-center">Tasks</h2>
+			<hr>
 			<div>
 				<ul class="list-group">
 					{% for task in tasks %}
-						<div class="list-group-item list-group-item-action {% if task.urgent %}list-group-item-warning{% endif %}" data-toggle="modal" data-target="#task{{ task.id }}Detail">
-							<p>{% if task.complete %}<del>{{task.name}}</del>{% else %}{{ task.name }}{% endif %}</p>
-							<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{task.id}}"></button>
-							<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ task.id }}" data-todoid="{{ task.id }}">
-								{% if task.complete %}
-									<a href="#" class="dropdown-item">Mark Incomplete</a>
-								{% else %}
-									<a href="#" class="dropdown-item">Mark Complete</a>
-								{% endif %}
-								<a href="{% url 'task-edit' task.id %}" class="dropdown-item">Edit</a>
-								<div class="dropdown-divider"></div>
-								<a href="{% url 'task-delete' task.id %}" class="dropdown-item">Delete</a>
+						<div class="allTasks list-group-item list-group-item-action {% if task.urgent %}list-group-item-warning{% endif %}" data-toggle="modal" data-target="#task{{ task.id }}Detail">
+							<div class="d-flex justify-content-between align-items-center">
+								<p>{% if task.complete %}<del>{{task.name}}</del>{% else %}{{ task.name }}{% endif %}</p>
+								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{task.id}}"></button>
+								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ task.id }}" data-todoid="{{ task.id }}">
+									{% if task.complete %}
+										<a href="#" class="dropdown-item">Mark Incomplete</a>
+									{% else %}
+										<a href="#" class="dropdown-item">Mark Complete</a>
+									{% endif %}
+									<a href="{% url 'task-edit' task.id %}" class="dropdown-item">Edit</a>
+									<div class="dropdown-divider"></div>
+									<a href="{% url 'task-delete' task.id %}" class="dropdown-item">Delete</a>
+								</div>
 							</div>
 						</div>
 						{# Task Detail Modal #}
@@ -78,18 +84,21 @@
 					{% endfor %}
 				</ul>
 			</div>
-			{# Add New #}
-			<button class="btn btn-primary" data-toggle="modal" data-target="#createTask">New Task</button>
+			<hr>
 		</div>
 		{# FOLDERS #}
 		<div class="col-md-4">
-			<h2>Folders</h2>
+			<h2 class="text-center">Folders</h2>
+			<hr>
 			<div class="list-group">
 				{% for folder in folders %}
 					<a href="{% url 'user-folder' workspace.id folder.id %}" class="list-group-item list-group-item-action">{{ folder.name }}</a>
 				{% endfor %}
 			</div>
-			<button class="btn btn-primary" data-toggle="modal" data-target="#createFolder">New Folder</button>
+			<hr>
+			<div class="float-right">
+				<button class="btn btn-outline-dark" data-toggle="modal" data-target="#createFolder">New Folder</button>
+			</div>
 		</div>
 	</div>
 	{# New Folder Modal #}

@@ -19,24 +19,45 @@
 {% block content %}
 
 	<h1>{{ notebook.title }}</h1>
+	<hr>
 	<div class="row">
+		{# Displaying Notes #}
+		<div class="col-md-8">
+			{# Default to display when no notes are clicked #}
+			<div class="notes" style="text-align:center;">
+				<h3 style="margin-top:40px;margin-bottom:30px;">Click on one of your notes to view</h3>
+			</div>
+			{% for note in notes %}
+				<div class="notes inactiveNote" id="{{ note.id }}">
+					<h3>{{ note.title }}</h3>
+					<div>{{ note.content|safe }}</div>
+				</div>
+			{% endfor %}
+		</div>
+		<hr>
 		<div class="col-md-4">
-			<h4>Notes</h4>
+			<h3 class="text-center">Notes</h3>
+			<hr>
 			<div>
 				<ul class="list-group">
 					{% for note in notes %}
 						<div class="list-group-item list-group-item-action allNotes" data-noteid="{{ note.id }}">
-							<p>{{ note.title }}</p>
-							<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="noteDropdown-{{note.id}}"></button>
-							<div class="dropdown-menu" aria-labelledby="noteDropdown-{{ note.id }}" data-noteid="{{ note.id }}">
-								<a href="{% url 'note-edit' note.id %}" class="dropdown-item">Edit</a>
-								<div class="dropdown-divider"></div>
-								<a href="{% url 'note-delete' note.id %}" class="dropdown-item">Delete</a>
+							<div class="d-flex justify-content-between align-items-center">
+								<p>{{ note.title }}</p>
+								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="noteDropdown-{{note.id}}"></button>
+								<div class="dropdown-menu" aria-labelledby="noteDropdown-{{ note.id }}" data-noteid="{{ note.id }}">
+									<a href="{% url 'note-edit' note.id %}" class="dropdown-item">Edit</a>
+									<div class="dropdown-divider"></div>
+									<a href="{% url 'note-delete' note.id %}" class="dropdown-item">Delete</a>
+								</div>
 							</div>
 						</div>
 					{% endfor %}
 				</ul>
-				<button class="btn btn-primary" data-toggle="modal" data-target="#noteCreate">New Note</button>
+			</div>
+			<hr>
+			<div class="float-right">
+				<button class="btn btn-outline-dark" data-toggle="modal" data-target="#noteCreate">New Note</button>
 				{# Note Create Modal #}
 				<div class="modal fade" id="noteCreate" tabindex="-1" role="dialog" aria-labelledby="noteCreateModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-lg" role="document">
@@ -62,14 +83,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-md-8">
-			{% for note in notes %}
-				<div class="notes inactiveNote" id="{{ note.id }}">
-					<h3>{{ note.title }}</h3>
-					<div>{{ note.content|safe }}</div>
-				</div>
-			{% endfor %}
 		</div>
 	</div>
 
