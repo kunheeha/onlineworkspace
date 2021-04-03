@@ -48,7 +48,8 @@ class UpdateTaskForm(ModelForm):
         model = Task
         fields = ['name', 'urgent', 'due_date', 'related_folders']
         widgets = {
-            'due_date': DateInput()
+            'due_date': DateInput(),
+            'related_folders': forms.CheckboxSelectMultiple
         }
 
 

@@ -153,6 +153,13 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Task
     form_class = UpdateTaskForm
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=self.form_class)
+        task = self.get_object()
+        form.fields['related_folders'].queryset = Folder.objects.filter(
+            workspace=Workspace.objects.filter(id=task.workspace.id).first()).all()
+        return form
+
     def test_func(self):
         task = self.get_object()
         if self.request.user in task.workspace.users.all():
