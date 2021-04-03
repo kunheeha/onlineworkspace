@@ -1,5 +1,6 @@
 import json
 from django.shortcuts import render, redirect
+from django import forms
 from django.db.models import Q
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -65,16 +66,13 @@ def workspace(request, *args, **kwargs):
     user_workspace = Workspace.objects.filter(id=workspace_id).first()
     tasks = Task.objects.filter(workspace=user_workspace)
     folders = Folder.objects.filter(workspace=user_workspace)
-    query = ''
-    if request.GET and 'q' in request.GET:
-        query = request.GET['q']
-        context['query'] = str(query)
 
     if request.method == 'POST':
         quicktaskform = TaskQuickAddForm(
             request.POST, initial={'workspace': user_workspace})
         createtaskform = CreateTaskForm(
             request.POST, initial={'workspace': user_workspace})
+        createtaskform.fields['related_folders'].queryset = folders.all()
         createfolderform = CreateFolderForm(
             request.POST, initial={'workspace': user_workspace})
         if 'addtask' in request.POST:
@@ -92,6 +90,7 @@ def workspace(request, *args, **kwargs):
 
     quicktaskform = TaskQuickAddForm(initial={'workspace': user_workspace})
     createtaskform = CreateTaskForm(initial={'workspace': user_workspace})
+    createtaskform.fields['related_folders'].queryset = folders.all()
     createfolderform = CreateFolderForm(initial={'workspace': user_workspace})
 
     context = {

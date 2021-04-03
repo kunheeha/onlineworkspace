@@ -38,6 +38,7 @@ class CreateTaskForm(ModelForm):
         fields = ['name', 'urgent', 'due_date', 'related_folders', 'workspace']
         widgets = {
             'due_date': DateInput(),
+            'related_folders': forms.CheckboxSelectMultiple,
             'workspace': forms.HiddenInput()
         }
 
