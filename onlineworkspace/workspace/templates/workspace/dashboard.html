@@ -10,29 +10,37 @@
 
 	<h1>Dashboard</h1>
 	<hr>
-
-	<div class="row row-cols-1 row-cols-md-3">
-		{% for workspace in workspaces %}
-			<div class="col mb-4">
-				<div class="card">
-			  	<a class="workspace-link" href="{% url 'user-workspace' workspace.id %}">
-			  		<div class="card-body">
-					    <h5 class="card-title">{{ workspace.name }}</h5>
-					    <p class="card-text">{{ workspace.desc }}</p>
+	{% if workspaces %}
+		<div class="row row-cols-1 row-cols-md-3">
+			{% for workspace in workspaces %}
+				<div class="col mb-4">
+					<div class="card">
+				  	<a class="workspace-link" href="{% url 'user-workspace' workspace.id %}">
+				  		<div class="card-body">
+						    <h5 class="card-title">{{ workspace.name }}</h5>
+						    <p class="card-text">{{ workspace.desc }}</p>
+							   <p class="text-muted"><small>Members: {% for user in workspace.users.all %}{{ user.username }}, {% endfor %}</small></p>
+						  </div>
+				  	</a>
+					  <div class="card-footer text-right">
+					  	<div class="dropdown">
+					  		<a style="cursor:pointer" class="card-link" id="optionsLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</a>
+					  		<div class="dropdown-menu" aria-labelledby="optionsLink">
+					  			<a href="{% url 'workspace-edit' workspace.id %}" class="dropdown-item">Edit</a>
+					  			<a href="{% url 'workspace-invite' workspace.id %}" class="dropdown-item">Members on workspace</a>
+					  			<div class="dropdown-divider"></div>
+					  			<a href="{% url 'workspace-delete' workspace.id %}" class="dropdown-item">Delete</a>
+					  		</div>
+					  	</div>
 					  </div>
-			  	</a>
-				  <div class="card-footer text-right">
-				  	<div class="dropdown">
-				  		<a style="cursor:pointer" class="card-link" id="optionsLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</a>
-				  		<div class="dropdown-menu" aria-labelledby="optionsLink">
-				  			<a href="{% url 'workspace-edit' workspace.id %}" class="dropdown-item">Edit</a>
-				  			<a href="{% url 'workspace-invite' workspace.id %}" class="dropdown-item">Invite to this workspace</a>
-				  		</div>
-				  	</div>
-				  </div>
+					</div>
 				</div>
-			</div>
-		{% endfor %}
+			{% endfor %}
+		</div>
+	{% else %}
+	<div class="d-flex justify-content-center align-items-center">
+		<h2><a href="{% url 'new-workspace' %}">Create a Workspace</a></h2>
 	</div>
+	{% endif %}
 
 {% endblock %}

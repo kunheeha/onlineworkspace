@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     DashboardListView, WorkspaceUpdateView, TaskUpdateView, TaskDeleteView,
     FileDeleteView, FolderUpdateView, NotebookUpdateView, NotebookDeleteView,
-    FolderDeleteView, NoteUpdateView, NoteDeleteView
+    FolderDeleteView, NoteUpdateView, NoteDeleteView, WorkspaceDeleteView,
+    WorkspaceInviteView
 )
 from . import views
 
@@ -30,6 +31,8 @@ urlpatterns = [
          FolderDeleteView.as_view(), name='folder-delete'),
     path('note/<int:pk>/update/', NoteUpdateView.as_view(), name='note-edit'),
     path('note/<int:pk>/delete/', NoteDeleteView.as_view(), name='note-delete'),
-    path('invite<int:workspace_id>/',
-         views.workspaceinvite, name='workspace-invite')
+    path('workspace/<int:pk>/delete/',
+         WorkspaceDeleteView.as_view(), name='workspace-delete'),
+    path('workspace/<int:pk>/invite/',
+         WorkspaceInviteView.as_view(), name='workspace-invite')
 ]

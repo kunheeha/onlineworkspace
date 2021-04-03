@@ -33,18 +33,28 @@
 			<div>
 				<ul class="list-group">
 					{% for task in tasks %}
-						<div class="allTasks list-group-item list-group-item-action {% if task.urgent %}list-group-item-warning{% endif %}" data-toggle="modal" data-target="#task{{ task.id }}Detail">
+						<div class="allTasks list-group-item list-group-item-action {% if task.urgent %}list-group-item-warning{% endif %}">
 							<div class="d-flex justify-content-between align-items-center">
-								<p>{% if task.complete %}<del>{{task.name}}</del>{% else %}{{ task.name }}{% endif %}</p>
-								{% if task.due_date %}
-									<p class="text-muted"><small>Due: {{ task.due_date }}</small></p>
-								{% endif %}
+								<div data-toggle="modal" data-target="#task{{ task.id }}Detail">
+									<p>{% if task.complete %}<del>{{task.name}}</del>{% else %}{{ task.name }}{% endif %}</p>
+									{% if task.due_date %}
+										<p class="text-muted"><small>Due: {% if task.complete %}<del>{{task.due_date}}</del>{% else %}{{ task.due_date }}{% endif %}</small></p>
+									{% endif %}
+								</div>
 								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{task.id}}"></button>
 								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ task.id }}" data-todoid="{{ task.id }}">
 									{% if task.complete %}
-										<a href="#" class="dropdown-item">Mark Incomplete</a>
+										<form method="POST">
+											{% csrf_token %}
+											<input type="hidden" name="task_id" value="{{ task.id }}">
+											<button type="submit" name="incompleteTask" class="dropdown-item">Mark Incomplete</button>
+										</form>
 									{% else %}
-										<a href="#" class="dropdown-item">Mark Complete</a>
+										<form method="POST">
+											{% csrf_token %}
+											<input type="hidden" name="task_id" value="{{ task.id }}">
+											<button type="submit" name="completeTask" class="dropdown-item">Mark Complete</button>
+										</form>
 									{% endif %}
 									<a href="{% url 'task-edit' task.id %}" class="dropdown-item">Edit</a>
 									<div class="dropdown-divider"></div>

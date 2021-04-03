@@ -19,6 +19,15 @@ class TaskQuickAddForm(ModelForm):
         }
 
 
+class WorkspaceInviteForm(ModelForm):
+    class Meta:
+        model = Workspace
+        fields = ['users']
+        widgets = {
+            'users': forms.CheckboxSelectMultiple
+        }
+
+
 class CreateFolderForm(ModelForm):
     class Meta:
         model = Folder

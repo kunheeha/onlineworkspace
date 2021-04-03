@@ -1,0 +1,25 @@
+{% extends 'workspace/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+
+	<div class='content-section'>
+		<form method='POST'>
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class="border-bottome mb-4">Delete Workspace</legend>
+				<h2>Are you sure you want to delete workspace {{ object.name }}?</h2>
+				<h4>This will delete all tasks, files and notes in this workspace</h4>
+			</fieldset>
+			<div class="form-group">
+				<button class="btn btn-outline-danger" type="submit">Delete</button>
+				<a href="{% url 'user-dashboard' %}" class="btn btn-outline-info">Cancel</a>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}

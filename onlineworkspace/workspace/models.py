@@ -15,13 +15,19 @@ class Workspace(models.Model):
     def get_absolute_url(self):
         return reverse('user-dashboard')
 
+    def delete(self, *args, **kwargs):
+        for folder in Folder.objects.filter(workspace=self).all():
+            for file in File.objects.filter(folder=folder).all():
+                file.filePath.delete()
+        super().delete(*args, **kwargs)
+
 
 class Folder(models.Model):
     name = models.CharField(max_length=50)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Folder {self.name}, belongs to {self.workspace.name}'
+        return self.name
 
 
 class Task(models.Model):
