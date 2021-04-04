@@ -1,9 +1,9 @@
 
 
-function runStripe(productID) {
+function runStripe(productID, quantity) {
 	var stripe = Stripe("pk_test_51IcE41LxTuLFo4wY1xRnnXqX8XTq7UyUfHsVvzhe75P2Zh19COwbop1MSUDjcTLSsp5iRaWQRa8a5D7sYDwnYkFO003I1BPo64");
 
-	fetch('/create-checkout-session/' + productID + '/', {
+	fetch('/create-checkout-session/' + productID + '/' + quantity + '/', {
 		method: 'POST',
 	})
 	.then(function(response) {
@@ -26,7 +26,8 @@ $(document).ready(function () {
 
 	$('.checkout-button').on('click', function() {
 		var productID = $(this).attr('data-productid');
-		runStripe(productID);
+		var quantity = $(`#${productID}quantity`).val();
+		runStripe(productID, quantity);
 	})
 
 });

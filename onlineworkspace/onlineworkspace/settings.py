@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.16', 'localhost']
+ALLOWED_HOSTS = ['192.168.0.16', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -154,6 +154,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 
 # Stripe
 STRIPE_SECRET_KEY = 'sk_test_51IcE41LxTuLFo4wYhG56StFLwfUHQxjCrgUGEDgDUMb9TI5CyS7XgbZg6lKToXsQjQ8fk6GQZaWul7XGcv7urZCz00FEaq54H9'
+STRIPE_WEBHOOK_SECRET = 'whsec_x3D2ouGvHbSS5zpS6w6mEujBU8RCiBld'
 
 # CSRF
 CSRF_USE_SESSIONS = True

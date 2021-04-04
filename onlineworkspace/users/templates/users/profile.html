@@ -34,6 +34,7 @@
 	      <h5>£{{ product.display_price }}</h5>
 	    </div>
 	  </div>
+	  <input type="number" id="{{ product.id }}quantity" min="1" max="100">
 	  <button type="button" class="checkout-button" data-productid="{{ product.id }}">Checkout</button>
 	{% endfor %}
 
