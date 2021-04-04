@@ -1,8 +1,10 @@
 {% extends 'workspace/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block head %}
-
+	<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+	<script src="https://js.stripe.com/v3/"></script>
 {% endblock %}
 
 {% block content %}
@@ -14,6 +16,32 @@
 			<p>Number of new Workspaces I can create: {{ workspaces }}</p>
 			<p>Number of new files I can upload: {{ files }}</p>
 		</div>
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Profile Info</legend>
+				{{ form|crispy }}
+			</fieldset>
+			<div class="form-group">
+				<button class="btn btn-outline-info" type="submit">Update</button>
+			</div>
+		</form>
 	</div>
+	{% for product in products %}
+		<div class="product">
+	    <div class="description">
+	      <h3>{{ product.name }}</h3>
+	      <h5>£{{ product.display_price }}</h5>
+	    </div>
+	  </div>
+	  <button type="button" class="checkout-button" data-productid="{{ product.id }}">Checkout</button>
+	{% endfor %}
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{% static 'users/checkout.js' %}"></script>
 
 {% endblock %}

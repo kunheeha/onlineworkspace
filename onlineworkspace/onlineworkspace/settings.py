@@ -143,7 +143,7 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 
-#Email
+# Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -151,3 +151,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
+
+# Stripe
+STRIPE_SECRET_KEY = 'sk_test_51IcE41LxTuLFo4wYhG56StFLwfUHQxjCrgUGEDgDUMb9TI5CyS7XgbZg6lKToXsQjQ8fk6GQZaWul7XGcv7urZCz00FEaq54H9'
+
+# CSRF
+CSRF_USE_SESSIONS = True

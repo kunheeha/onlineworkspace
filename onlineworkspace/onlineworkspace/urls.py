@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from users import views as user_views
+from users.views import CreateCheckoutSessionView, SuccessView, CancelView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +37,10 @@ urlpatterns = [
     path('password-reset/complete', auth_views.PasswordResetCompleteView.as_view(
         template_name='users/password_reset_complete.html'), name='password_reset_complete'),
     path('tinymce/', include('tinymce.urls')),
+    path('create-checkout-session/<int:pk>/',
+         CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
+    path('success/', SuccessView.as_view(), name='success'),
+    path('cancel/', CancelView.as_view(), name='cancel'),
 ]
 
 if settings.DEBUG:
