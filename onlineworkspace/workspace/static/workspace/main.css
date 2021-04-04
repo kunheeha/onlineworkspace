@@ -35,3 +35,8 @@ ul {
   color: #444444;
   text-decoration: none;
 }
+
+.task-list {
+  height: 60vh !important;
+  overflow-y: auto !important;
+}
