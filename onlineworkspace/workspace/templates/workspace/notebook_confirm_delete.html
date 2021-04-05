@@ -12,12 +12,12 @@
 			{% csrf_token %}
 			<fieldset class="form-group">
 				<legend class="border-bottome mb-4">Delete Notebook</legend>
-				<h2>Are you sure you want to delete notebook {{ object.name }}?</h2>
-				<h3>This will delete all notes in this notebook</h3>
+				<h4>Are you sure you want to delete notebook {{ object.name }}?</h4>
+				<p>This will delete all notes in this notebook</p>
 			</fieldset>
 			<div class="form-group">
 				<button class="btn btn-outline-danger" type="submit">Delete</button>
-				<a href="{% url 'user-notebook' object.folder.workspace.id object.folder.id object.id %}" class="btn btn-outline-info">Cancel</a>
+				<a href="{% url 'user-notebook' object.folder.workspace.id object.folder.id object.id %}" class="btn btn-outline-dark">Cancel</a>
 			</div>
 		</form>
 	</div>

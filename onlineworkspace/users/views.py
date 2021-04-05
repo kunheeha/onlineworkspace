@@ -59,9 +59,21 @@ def profile(request):
 class SuccessView(TemplateView):
     template_name = 'users/success.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['workspaces'] = self.request.user.profile.workspaces_number
+        context['files'] = self.request.user.profile.files_number
+        return context
+
 
 class CancelView(TemplateView):
     template_name = 'users/cancel.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['workspaces'] = self.request.user.profile.workspaces_number
+        context['files'] = self.request.user.profile.files_number
+        return context
 
 
 class CreateCheckoutSessionView(View):

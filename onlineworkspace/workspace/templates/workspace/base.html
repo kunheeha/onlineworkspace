@@ -15,7 +15,7 @@
 	{% block head %}
   {% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<header class="site-header">
 	  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 	    <div class="container">
@@ -42,7 +42,7 @@
 	    </div>
 	  </nav>
 	</header>
-	<main role="main" class="container">
+	<main role="main" class="container flex-fill">
 	  <div class="row">
 	    <div class="col-md-12">
 	    	{% if messages %}
@@ -54,6 +54,12 @@
 	    </div>
 	  </div>
 	</main>
+
+	<footer class="footer mt-auto py-3">
+		<div class="container">
+			<span><a class="footer-link" href="https://www.linkedin.com/in/kunheeha" target="_blank">Developer - Kunhee Ha</a></span>
+		</div>
+	</footer>
 
 	{# jQuery #}
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

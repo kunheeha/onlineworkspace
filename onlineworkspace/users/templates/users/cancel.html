@@ -1,1 +1,27 @@
-Cancelled
+{% extends 'workspace/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block navbar %}
+
+	<a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
+
+{% endblock %}
+
+{% block content %}
+
+<div class='content-section'>
+	<div>
+		<h2 class="account-heading">Payment Cancelled</h2>
+		<hr>
+		<p>Number of Workspaces I can create: <strong>{{ workspaces }}</strong></p>
+		<p>Number of Files I can upload: <strong>{{ files }}</strong></p>
+	</div>
+	<div>
+		<a class="btn btn-outline-info" href="{% url 'profile' %}">Back to My Account</a>
+	</div>
+</div>
+
+
+{% endblock %}

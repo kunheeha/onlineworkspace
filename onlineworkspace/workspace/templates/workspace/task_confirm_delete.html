@@ -12,11 +12,11 @@
 			{% csrf_token %}
 			<fieldset class="form-group">
 				<legend class="border-bottome mb-4">Delete Task</legend>
-				<h2>Are you sure you want to delete task {{ object.name }}?</h2>
+				<h4>Are you sure you want to delete task {{ object.name }}?</h4>
 			</fieldset>
 			<div class="form-group">
 				<button class="btn btn-outline-danger" type="submit">Delete</button>
-				<a href="{% url 'user-workspace' object.workspace.id %}" class="btn btn-outline-info">Cancel</a>
+				<a href="{% url 'user-workspace' object.workspace.id %}" class="btn btn-outline-dark">Cancel</a>
 			</div>
 		</form>
 	</div>
