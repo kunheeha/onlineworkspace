@@ -73,14 +73,16 @@
 						        </button>
 						      </div>
 						      <div class="modal-body">
-						      	<h4>Task : {{ task.name }}</h4>
 						      	{% if task.urgent %}
 						      		<h4>URGENT</h4>
 						      	{% endif %}
+						      	<h4>Task : {{ task.name }}</h4>
 						      	{% if task.due_date %}
 						      		<p>Due {{ task.due_date }}</p>
 						      	{% endif %}
+						      	<hr>
 						      	{% if task.related_folders %}
+						      		<p>Related Folders:</p>
 						      		{% for folder in task.related_folders.all %}
 						      			<a href="{% url 'user-folder' workspace.id folder.id %}">{{ folder.name }}</a>
 						      		{% endfor %}
@@ -89,7 +91,7 @@
 						      <div class="modal-footer">
 						        <a class="btn btn-outline-info" href="{% url 'task-edit' task.id %}">Edit</a>
 						        <a class="btn btn-outline-danger" href="{% url 'task-delete' task.id %}">Delete</a>
-						        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+						        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
 						      </div>
 						    </div>
 						  </div>
@@ -160,10 +162,26 @@
 	    </div>
 	  </div>
 	</div>
-
-	<script type="text/javascript">
-		document.getElementById('id_q').value = '{{query}}';
-	</script>
+	<a data-toggle="modal" data-target="#helpModal" class="float"><p class="my-float">Help</p></a>
+	{# Help Modal #}
+	<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="help">Help</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<p>Use the Quick add a task section to add simple tasks or click on New Detailed Task to add a task with a due date and assign relevant folders to the task</p><img src="{% static 'workspace/workspace/quickadd.png' %}"><img src="{% static 'workspace/workspace/detailtask.png' %}" width="50%"><hr><p>Create a folder using the New Folder button and you can upload relevant files and create notebooks within the folder</p><img src="{% static 'workspace/workspace/folder.png' %}" width="100%">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 
 {% endblock %}

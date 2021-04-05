@@ -1,4 +1,5 @@
 {% extends 'workspace/base.html' %}
+{% load static %}
 
 {% block head %}
 
@@ -42,5 +43,26 @@
 		<h2><a href="{% url 'new-workspace' %}">Create a Workspace</a></h2>
 	</div>
 	{% endif %}
+
+	<a data-toggle="modal" data-target="#helpModal" class="float"><p class="my-float">Help</p></a>
+	{# Help Modal #}
+	<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="help">Help</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<p>This is your dashboard where all your Workspaces are stored</p><p>Once you've created your first Workspace you can create more from the New Workspace option on the navigation bar</p><img src="{% static 'workspace/dashboard/NewWorkspace.png' %}" width="50%"><img src="{% static 'workspace/dashboard/invite.png' %}" width="50%"><p>The options link on the Workspaces allow you to edit, grant other people access to, or delete the Workspace entirely</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 {% endblock %}
