@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.16', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -77,7 +77,22 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} #Only using SQLite for testing; use below for deployment
+    # 'default': {
+
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+    #     'NAME': '',
+
+    #     'USER': '',
+
+    #     'PASSWORD': '',
+
+    #     'HOST': '',
+
+    #     'PORT': '',
+
+    # }
 
 
 # Password validation
@@ -153,8 +168,7 @@ EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 
 # Stripe
-STRIPE_SECRET_KEY = 'sk_test_51IcE41LxTuLFo4wYhG56StFLwfUHQxjCrgUGEDgDUMb9TI5CyS7XgbZg6lKToXsQjQ8fk6GQZaWul7XGcv7urZCz00FEaq54H9'
-STRIPE_WEBHOOK_SECRET = 'whsec_x3D2ouGvHbSS5zpS6w6mEujBU8RCiBld'
-
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 # CSRF
 CSRF_USE_SESSIONS = True
